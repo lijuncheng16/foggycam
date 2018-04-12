@@ -13,7 +13,7 @@ import threading
 import time
 from datetime import datetime
 import subprocess
-from azurestorageprovider import AzureStorageProvider
+#from azurestorageprovider import AzureStorageProvider
 
 
 class FoggyCam(object):
@@ -319,19 +319,24 @@ class FoggyCam(object):
                         
                         if use_terminal or (os.path.isfile(ffmpeg_path) and use_terminal is False):
                             print ('INFO: Found ffmpeg. Processing video!')
-                            target_video_path = os.path.join(video_path, file_id + '.mp4')
+                            time_now = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+                            date_today = datetime.now().strftime('%Y-%m-%d')
+                            video_today_path = os.path.join(video_path, date_today)
+                            if not os.path.exists(video_today_path):
+                                os.makedirs(video_today_path)
+                            target_video_path = os.path.join(video_today_path, time_now + '.mp4')
                             process = Popen([ffmpeg_path, '-r', str(config.frame_rate), '-f', 'concat', '-safe', '0', '-i', concat_file_name, '-vcodec', 'libx264', '-crf', '25', '-pix_fmt', 'yuv420p', target_video_path], stdout=PIPE, stderr=PIPE)
                             process.communicate()
                             os.remove(concat_file_name)
                             print ('INFO: Video processing is complete!')
 
                             # Upload the video
-                            storage_provider = AzureStorageProvider()
+                            #storage_provider = AzureStorageProvider()
 
                             if bool(config.upload_to_azure):
                                 print ('INFO: Uploading to Azure Storage...')
                                 target_blob = 'foggycam/' + camera + '/' + file_id + '.mp4'
-                                storage_provider.upload_video(account_name=config.az_account_name, sas_token=config.az_sas_token, container='foggycam', blob=target_blob, path=target_video_path)
+                                #storage_provider.upload_video(account_name=config.az_account_name, sas_token=config.az_sas_token, container='foggycam', blob=target_blob, path=target_video_path)
                                 print ('INFO: Upload complete.')
 
                             # If the user specified the need to remove images post-processing
