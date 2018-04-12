@@ -55,3 +55,7 @@ Run `python start.py` after you configured the settings above. Exit by pressing 
 I do not make any claims regarding the stability of the application, or its applicability for your own purposes. Use at your own risk. Code is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 **DO NOT USE** in critical security/surveillance scenarios.
+
+## Stability 
+
+Tested on Linux Ubuntu 14.04, runs fine for 3 days so far. parameter: threshold 300 frame rate 23, bascially you can watch 5min length of actual recording in less than 2 mins.
